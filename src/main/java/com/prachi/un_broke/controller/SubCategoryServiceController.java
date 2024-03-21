@@ -43,7 +43,7 @@ public class SubCategoryServiceController {
     }
 
     @DeleteMapping("/{id}")
-    public List<SubCategory> deleteSubCategory(@PathVariable("id") int id){
+    public ResponseEntity<List<SubCategory>> deleteSubCategory(@PathVariable("id") int id){
         subCategoryService.deletSubCategory(id);
         return getSubCategories();
     }
