@@ -50,9 +50,9 @@ public class ExpenseServiceController {
         return getExpenses();
     }
 
-//    @GetMapping("/categories")
-//    public ResponseEntity<List<Expense_DTO>> getExpensesWithCategory(){
-//        List<Expense_DTO> expenses = expenseService.getExpensesWithCategory();
-//        return ResponseEntity.ok(expenses);
-//    }
+    @GetMapping("/categories")
+    public ResponseEntity<List<Object>> getExpensesWithCategory(){
+        List<Object> expenses = expenseService.getExpensesWithCategory();
+        return ResponseEntity.ok(expenses);
+    }
 }

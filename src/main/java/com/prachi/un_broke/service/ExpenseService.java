@@ -1,17 +1,14 @@
 package com.prachi.un_broke.service;
 
 
-import com.prachi.un_broke.LoggerClass;
 import com.prachi.un_broke.dto.Expense_DTO;
-import com.prachi.un_broke.model.Category;
 import com.prachi.un_broke.model.Expense;
 import com.prachi.un_broke.model.SubCategory;
-import com.prachi.un_broke.repository.CategoryRepo;
 import com.prachi.un_broke.repository.ExpenseRepo;
-import com.prachi.un_broke.repository.SubCategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,31 +30,48 @@ public class ExpenseService {
 
     public Expense createExpense(Expense_DTO edto) {
         SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id());
-        edto.setSubcategory(subCat);
-        Expense expense = new Expense(edto.getDescription(), edto.getAmount(),  new java.sql.Date(new Date().getTime()), subCat);
-        return expenseRepo.save(expense);
+        if(subCat != null) {
+            edto.setSubcategory(subCat);
+            Expense expense = new Expense(edto.getDescription(), edto.getAmount(), new java.sql.Date(new Date().getTime()), subCat);
+            return expenseRepo.save(expense);
+        }
+        else
+            return null;
     }
 
     public Expense updateExpense(Expense_DTO edto, int id){
         Expense expense = getExpenseById(id);
-        if(edto.getDate() != null)
-            expense.setDate(edto.getDate());
+        if(expense != null) {
+            if (edto.getDate() != null)
+                expense.setDate(edto.getDate());
+            else
+                expense.setDate(expense.getDate());
+            expense.setAmount(edto.getAmount());
+            expense.setDescription(edto.getDescription());
+            SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id());
+            expense.setSubCategory(subCat);
+
+            return expenseRepo.save(expense);
+        }
         else
-            expense.setDate(expense.getDate());
-        expense.setAmount(edto.getAmount());
-        expense.setDescription(edto.getDescription());
-        SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id());
-        expense.setSubCategory(subCat);
-
-        return expenseRepo.save(expense);
-
+            return null;
     }
 
     public void deleteExpense(int id){
         expenseRepo.deleteById(id);
     }
-
-   /* public List<Expense_DTO> getExpensesWithCategory() {
-        return expenseRepo.getExpensesWithCategory();
-    }*/
+    public List<Object> getExpensesWithCategory() {
+        List<Expense> expenseList = getExpenses();
+        List<Object> expensesWithCategories = new ArrayList<>();
+        for(Expense expense: expenseList){
+            List<Object> expenseWithCategory = new ArrayList<>();
+            expenseWithCategory.add(expense.getDate());
+            expenseWithCategory.add(expense.getDescription());
+            expenseWithCategory.add(expense.getAmount());
+            expenseWithCategory.add(expense.getSubCategory().getSubCategory());
+            expenseWithCategory.add(expense.getSubCategory().getCategory().getCategory());
+            expensesWithCategories.add(expenseWithCategory);
+        }
+        return expensesWithCategories;
+    }
 }
