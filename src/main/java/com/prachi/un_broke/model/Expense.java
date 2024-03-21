@@ -10,7 +10,7 @@ import java.sql.Date;
 @Table(name="expenses")
 public class Expense {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double amount;
     private String description;

@@ -4,16 +4,17 @@ import com.prachi.un_broke.model.Category;
 
 
 public class Category_DTO {
-    private int id;
-    private String sub_category;
+    private int id; // subcategory id
+    private String sub_category; // subcategory name
     private int cat_id;  // category id
-    private Category category;
+    private Category category; // category object
 
+    // Constructors
     public Category_DTO(){}
 
-    public Category_DTO(String subcategory, int cat_id){
+    public Category_DTO(Category category, String subcategory){
+        this.category = category;
         this.sub_category = subcategory;
-        this.cat_id = cat_id;
     }
 
     // Getters

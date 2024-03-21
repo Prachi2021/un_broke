@@ -3,35 +3,49 @@ package com.prachi.un_broke.controller;
 import com.prachi.un_broke.dto.Category_DTO;
 import com.prachi.un_broke.model.Category;
 import com.prachi.un_broke.model.SubCategory;
+import com.prachi.un_broke.service.CategoryService;
 import com.prachi.un_broke.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/sub_categories")
 public class SubCategoryServiceController {
     @Autowired
-    private SubCategoryService subCategoryService;
-}
+    SubCategoryService subCategoryService;
+    @Autowired
+    CategoryService categoryService;
 
-    @GetMapping("/sub_categories")
-    public List<SubCategory> getSubCategories() {
-        return subCategoryService.
-    }
-    public SubCategory getSubCategoriesById(int id) {
-        return subCategory.findById(id).orElse(null);
+    @GetMapping("")
+    public ResponseEntity<List<SubCategory>> getSubCategories(){
+        List<SubCategory> subcategories = subCategoryService.getSubCategories();
+        return ResponseEntity.ok(subcategories);
     }
 
-    public SubCategory createSubCategory(@RequestBody Category_DTO dto){
-        Category category = categoryRepo.findById(dto.getCat_id()).orElse(null);
-        if (category == null) throw new RuntimeException();
-        else {
-            SubCategory subCategory = new SubCategory(dto.getSub_category(), dto.getCategory());
-            return subCategoryRepo.save(subCategory);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<SubCategory> getSubCategoriesById(@PathVariable("id") int id) {
+        SubCategory subCat = subCategoryService.getSubCategoriesById(id);
+        return ResponseEntity.ok(subCat);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<SubCategory> createSubCategory(@RequestBody Category_DTO cdto) {
+        SubCategory subCat = subCategoryService.createSubCategory(cdto);
+        return ResponseEntity.ok(subCat);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<SubCategory> updateSubCategory(@RequestBody Category_DTO cdto) {
+        SubCategory subCat = subCategoryService.updateSubCategory(cdto);
+        return ResponseEntity.ok(subCat);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<List<SubCategory>> deleteSubCategory(@PathVariable("id") int id){
+        subCategoryService.deletSubCategory(id);
+        return getSubCategories();
+    }
 }

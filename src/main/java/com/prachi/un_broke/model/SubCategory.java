@@ -9,13 +9,13 @@ import java.util.Set;
 @Table(name="sub_categories")
 public class SubCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String subcategory;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catId", referencedColumnName = "id")
+    @JoinColumn(name = "cat_id", referencedColumnName = "id")
     Category category;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "id")
@@ -23,9 +23,9 @@ public class SubCategory {
 
 
     public SubCategory(){}
-    public SubCategory(String sub_category, Category category){
+    public SubCategory(Category category, String subcategory){
         this.category = category;
-        this.subcategory = sub_category;
+        this.subcategory = subcategory;
     }
     // Getters
     public int getId() {
