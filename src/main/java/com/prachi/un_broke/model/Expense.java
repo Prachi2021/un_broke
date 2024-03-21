@@ -16,17 +16,17 @@ public class Expense {
     private String description;
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catId", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "cat_id", referencedColumnName = "id")
     SubCategory subCategory;
 
 
     public Expense(){}
-    public Expense(String desc, double amt, SubCategory subCategory, Date date){
-        this.amount = amt;
+    public Expense(String desc, double amt, Date date, SubCategory subCategory){
         this.description= desc;
-        this.subCategory = subCategory;
+        this.amount = amt;
         this.date = date;
+        this.subCategory = subCategory;
     }
 
     // Getters
