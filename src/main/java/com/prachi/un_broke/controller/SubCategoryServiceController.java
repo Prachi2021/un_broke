@@ -1,7 +1,6 @@
 package com.prachi.un_broke.controller;
 
 import com.prachi.un_broke.dto.Category_DTO;
-import com.prachi.un_broke.model.Category;
 import com.prachi.un_broke.model.SubCategory;
 import com.prachi.un_broke.service.CategoryService;
 import com.prachi.un_broke.service.SubCategoryService;
@@ -37,14 +36,14 @@ public class SubCategoryServiceController {
         return ResponseEntity.ok(subCat);
     }
 
-    @PutMapping("")
-    public ResponseEntity<SubCategory> updateSubCategory(@RequestBody Category_DTO cdto) {
-        SubCategory subCat = subCategoryService.updateSubCategory(cdto);
+    @PutMapping("/{id}")
+    public ResponseEntity<SubCategory> updateSubCategory(@RequestBody Category_DTO cdto, @PathVariable("id") int id) {
+        SubCategory subCat = subCategoryService.updateSubCategory(cdto, id);
         return ResponseEntity.ok(subCat);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<List<SubCategory>> deleteSubCategory(@PathVariable("id") int id){
+    public List<SubCategory> deleteSubCategory(@PathVariable("id") int id){
         subCategoryService.deletSubCategory(id);
         return getSubCategories();
     }

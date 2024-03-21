@@ -5,24 +5,22 @@ import com.prachi.un_broke.model.Category;
 
 public class Category_DTO {
     private int id; // subcategory id
-    private String sub_category; // subcategory name
+    private String subcategory; // subcategory name
     private int cat_id;  // category id
     private Category category; // category object
 
     // Constructors
-    public Category_DTO(){}
-
     public Category_DTO(Category category, String subcategory){
         this.category = category;
-        this.sub_category = subcategory;
+        this.subcategory = subcategory;
     }
 
     // Getters
     public int getId() {
         return id;
     }
-    public String getSub_category() {
-        return sub_category;
+    public String getSubcategory() {
+        return subcategory;
     }
     public Category getCategory() {
         return category;
@@ -35,8 +33,8 @@ public class Category_DTO {
     public void setId(int id) {
         this.id = id;
     }
-    public void setSub_category(String sub_category) {
-        this.sub_category = sub_category;
+    public void setSubcategory(String sub_category) {
+        this.subcategory = sub_category;
     }
     public void setCategory(Category category) {
         this.category = category;

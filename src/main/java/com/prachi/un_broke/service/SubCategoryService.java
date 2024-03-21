@@ -1,6 +1,7 @@
 package com.prachi.un_broke.service;
 
 
+import com.prachi.un_broke.LoggerClass;
 import com.prachi.un_broke.dto.Category_DTO;
 import com.prachi.un_broke.model.Category;
 import com.prachi.un_broke.model.SubCategory;
@@ -22,8 +23,10 @@ public class SubCategoryService {
     public List<SubCategory> getSubCategories() {
         if(subCategoryRepo!=null)
             return subCategoryRepo.findAll();
-        else
+        else {
+            LoggerClass.provideError("------------------Sub Category List is null------------------");
             return null;
+        }
     }
     public SubCategory getSubCategoriesById(int id) {
         return subCategoryRepo.findById(id).orElse(null);
@@ -32,18 +35,21 @@ public class SubCategoryService {
     public SubCategory createSubCategory(Category_DTO cdto){
         Category cat = categoryRepo.findById(cdto.getCat_id()).orElse(null);
         if(cat != null) {
-            SubCategory subCategory = new SubCategory(cat, cdto.getSub_category());
+            SubCategory subCategory = new SubCategory(cat, cdto.getSubcategory());
             return subCategoryRepo.save(subCategory);
         }
-        else return null;
+        else {
+            LoggerClass.provideError("------------------Category is null------------------");
+            return null;
+        }
     }
 
-    public SubCategory updateSubCategory(Category_DTO cdto){
+    public SubCategory updateSubCategory(Category_DTO cdto, int id){
         Category cat = categoryRepo.findById(cdto.getCat_id()).orElse(null);
         if(cat != null) {
-            SubCategory subCategory = subCategoryRepo.findById(cdto.getId()).orElse(null);
+            SubCategory subCategory = subCategoryRepo.findById(id).orElse(null);
             if(subCategory != null){
-                subCategory.setSubCategory(cdto.getSub_category());
+                subCategory.setSubCategory(cdto.getSubcategory());
                 subCategory.setCategory(cat);
                 return subCategoryRepo.save(subCategory);
             }
