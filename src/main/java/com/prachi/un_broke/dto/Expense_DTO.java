@@ -12,8 +12,6 @@ public class Expense_DTO {
     private Date date;
     private int cat_id;  // sub category id
     private SubCategory subcategory;
-    private int category_id; // category id
-    private String category;
 
 
 
@@ -43,12 +41,6 @@ public class Expense_DTO {
     public SubCategory getSubcategory(){
         return subcategory;
     }
-    public String getCategory() {
-        return category;
-    }
-    public int getCategory_id() {
-        return category_id;
-    }
 
     // Setters
     public void setId(int id) {
@@ -68,11 +60,5 @@ public class Expense_DTO {
     }
     public void setSubcategory(SubCategory sub_cat) {
         this.subcategory = sub_cat;
-    }
-    public void setCategory(String cat) {
-        this.category = cat;
-    }
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
     }
 }

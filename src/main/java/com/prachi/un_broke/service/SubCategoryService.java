@@ -28,7 +28,7 @@ public class SubCategoryService {
             return null;
         }
     }
-    public SubCategory getSubCategoriesById(int id) {
+    public SubCategory getSubCategoryById(int id) {
         return subCategoryRepo.findById(id).orElse(null);
     }
 
@@ -58,7 +58,7 @@ public class SubCategoryService {
         else return null;
     }
 
-    public void deletSubCategory(int id){
+    public void deleteSubCategory(int id){
         SubCategory subCat = subCategoryRepo.findById(id).orElse(null);
         if(subCat != null)
             subCategoryRepo.delete(subCat);

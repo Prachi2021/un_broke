@@ -26,7 +26,7 @@ public class SubCategoryServiceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SubCategory> getSubCategoriesById(@PathVariable("id") int id) {
-        SubCategory subCat = subCategoryService.getSubCategoriesById(id);
+        SubCategory subCat = subCategoryService.getSubCategoryById(id);
         return ResponseEntity.ok(subCat);
     }
 
@@ -44,7 +44,7 @@ public class SubCategoryServiceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<List<SubCategory>> deleteSubCategory(@PathVariable("id") int id){
-        subCategoryService.deletSubCategory(id);
+        subCategoryService.deleteSubCategory(id);
         return getSubCategories();
     }
 }
