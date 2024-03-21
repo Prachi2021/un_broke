@@ -18,7 +18,7 @@ public class SubCategoryService {
     @Autowired
     SubCategoryRepo subCategoryRepo;
     @Autowired
-    CategoryRepo categoryRepo;
+    CategoryService categoryService;
 
     public List<SubCategory> getSubCategories() {
         if(subCategoryRepo!=null)
@@ -33,7 +33,7 @@ public class SubCategoryService {
     }
 
     public SubCategory createSubCategory(Category_DTO cdto){
-        Category cat = categoryRepo.findById(cdto.getCat_id()).orElse(null);
+        Category cat = categoryService.getCategoryById(cdto.getCat_id());
         if(cat != null) {
             SubCategory subCategory = new SubCategory(cat, cdto.getSubcategory());
             return subCategoryRepo.save(subCategory);
@@ -45,9 +45,9 @@ public class SubCategoryService {
     }
 
     public SubCategory updateSubCategory(Category_DTO cdto, int id){
-        Category cat = categoryRepo.findById(cdto.getCat_id()).orElse(null);
+        Category cat = categoryService.getCategoryById(cdto.getCat_id());
         if(cat != null) {
-            SubCategory subCategory = subCategoryRepo.findById(id).orElse(null);
+            SubCategory subCategory = getSubCategoryById(id);
             if(subCategory != null){
                 subCategory.setSubCategory(cdto.getSubcategory());
                 subCategory.setCategory(cat);
@@ -59,7 +59,7 @@ public class SubCategoryService {
     }
 
     public void deleteSubCategory(int id){
-        SubCategory subCat = subCategoryRepo.findById(id).orElse(null);
+        SubCategory subCat = getSubCategoryById(id);
         if(subCat != null)
             subCategoryRepo.delete(subCat);
     }

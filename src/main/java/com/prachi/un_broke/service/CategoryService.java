@@ -30,7 +30,7 @@ public class CategoryService {
     }
 
     public Category updateCategory(Category category, int id) {
-        Category cat = categoryRepo.findById(id).orElse(null);
+        Category cat = getCategoryById(id);
         if (cat != null){
             cat.setCategory(category.getCategory());
             return categoryRepo.save(cat);
@@ -40,7 +40,7 @@ public class CategoryService {
 
     }
     public void deleteCategory(int id){
-        Category cat = categoryRepo.findById(id).orElse(null);
+        Category cat = getCategoryById(id);
         if(cat != null)
             categoryRepo.delete(cat);
     }
