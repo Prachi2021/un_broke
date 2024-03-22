@@ -5,11 +5,11 @@ import com.prachi.un_broke.LoggerClass;
 import com.prachi.un_broke.dto.Category_DTO;
 import com.prachi.un_broke.model.Category;
 import com.prachi.un_broke.model.SubCategory;
-import com.prachi.un_broke.repository.CategoryRepo;
 import com.prachi.un_broke.repository.SubCategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -64,4 +64,16 @@ public class SubCategoryService {
             subCategoryRepo.delete(subCat);
     }
 
+    public List<Object> getSubcatWithCat(){
+        List<SubCategory> subCategories = getSubCategories();
+        List<Object> arrSubcatsWithCat =  new ArrayList<>();
+        for(SubCategory subCategory : subCategories){
+            List<Object> subcatWithCat =  new ArrayList<>();
+            subcatWithCat.add(subCategory.getId());
+            subcatWithCat.add(subCategory.getSubCategory());
+            subcatWithCat.add(subCategory.getCategory().getCategory());
+            arrSubcatsWithCat.add(subcatWithCat);
+        }
+        return arrSubcatsWithCat;
+    }
 }

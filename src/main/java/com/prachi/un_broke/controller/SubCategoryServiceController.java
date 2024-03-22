@@ -47,4 +47,9 @@ public class SubCategoryServiceController {
         subCategoryService.deleteSubCategory(id);
         return getSubCategories();
     }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<Object>> getSubcatsWithCategories(){
+        return ResponseEntity.ok(subCategoryService.getSubcatWithCat());
+    }
 }
