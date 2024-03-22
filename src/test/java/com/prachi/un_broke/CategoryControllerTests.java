@@ -48,7 +48,7 @@ public class CategoryControllerTests {
     // Check if categories list retrieved is empty, upon GET method of url and status is NO CONTENT
     @Test
     void get_empty_categories_list() throws Exception {
-        List<Category> mockCategories = new ArrayList<Category>();
+        List<Category> mockCategories = new ArrayList<>();
         when(categoryService.getCategories()).thenReturn(mockCategories);
         mockMvc.perform(get("/api/categories"))
                 .andExpect(status().isNoContent())
@@ -67,7 +67,7 @@ public class CategoryControllerTests {
     // Check if category is returned when category is found by Id
     @Test
     void get_category_by_id_found() throws Exception{
-        List<Category> mockCategories = new ArrayList<Category>();
+        List<Category> mockCategories = new ArrayList<>();
         mockCategories.add(new Category(1, "long term savings"));
         when(categoryService.getCategoryById(1)).thenReturn(mockCategories.get(0));
         mockMvc.perform(get("/api/categories/1"))
@@ -86,7 +86,7 @@ public class CategoryControllerTests {
 
     // Check if category is created successfully
     @Test
-    void create_category_successfull() throws Exception{
+    void create_category_successful() throws Exception{
         Category category = new Category(1, "needs");
         when(categoryService.createCategory(any(Category.class))).thenReturn(category);
         mockMvc.perform(post("/api/categories")
