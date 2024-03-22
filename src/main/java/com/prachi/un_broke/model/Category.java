@@ -17,6 +17,9 @@ public class Category {
     private Set<SubCategory> subCategories;
 
     public Category(){}
+    public Category(String category){
+        this.category = category;
+    }
     public Category(int id, String category){
         this.id = id;
         this.category = category;

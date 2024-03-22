@@ -6,6 +6,7 @@ import com.prachi.un_broke.repository.CategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +27,11 @@ public class CategoryService {
     }
 
     public Category createCategory(Category category){
-        return categoryRepo.save(category);
+        Category cat = categoryRepo.findById(category.getId()).orElse(null);
+        if(cat == null)
+            return categoryRepo.save(category);
+        else
+            return null;
     }
 
     public Category updateCategory(Category category, int id) {
@@ -39,10 +44,14 @@ public class CategoryService {
             return null;
 
     }
-    public void deleteCategory(int id){
+    public List<Category> deleteCategory(int id){
         Category cat = getCategoryById(id);
-        if(cat != null)
+        if(cat != null) {
             categoryRepo.delete(cat);
+            return getCategories();
+        }
+        else
+            return null;
     }
 
 }
