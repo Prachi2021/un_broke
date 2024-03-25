@@ -22,13 +22,11 @@ public class Mode {
     private Set<Expense> expenses;
 
     public Mode(){}
-    public Mode(String mode){
+    public Mode(String mode, User user){
         this.mode = mode;
+        this.user = user;
     }
-    public Mode(int id, String mode){
-        this.mode_id = id;
-        this.mode = mode;
-    }
+
     // Getters
     public int getModeId() {
         return mode_id;
