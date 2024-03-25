@@ -25,12 +25,12 @@ public class UserService {
         return userRepo.findById(id).orElse(null);
     }
 
-    public User getUserByUsername(String username) {
-        return userRepo.findByUsername(username);
+    public User getUserByEmail(String email) {
+        return userRepo.findByUsername(email).orElse(null);
     }
 
     public User createUser(User user){
-        User user1 = userRepo.findById(user.getUser_id()).orElse(null);
+        User user1 = getUserByEmail(user.getEmail());
         if(user1 == null) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
             String pass = encoder.encode(user.getPassword());
@@ -66,7 +66,7 @@ public class UserService {
     }
 
     public User loadUserByUsername(String username) {
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByEmail(username).orElse(null);
         if (user == null) {
             return null;
         }

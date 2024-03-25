@@ -86,7 +86,8 @@ public class CategoryControllerTests {
 
     // Check if category is created successfully
     @Test
-    void create_category_successful() throws Exception{
+    void create_category_successful
+    () throws Exception{
         Category category = new Category(1, "needs");
         when(categoryService.createCategory(any(Category.class))).thenReturn(category);
         mockMvc.perform(post("/api/categories")

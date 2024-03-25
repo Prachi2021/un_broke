@@ -1,54 +1,60 @@
 package com.prachi.un_broke.controller;
 
-import com.prachi.un_broke.dto.UserLoginDTO;
+
+import com.prachi.un_broke.JwtUtil;
+import com.prachi.un_broke.model.JwtRequest;
+import com.prachi.un_broke.model.JwtResponse;
 import com.prachi.un_broke.model.User;
+import com.prachi.un_broke.service.CustomUserDetailsService;
 import com.prachi.un_broke.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
-
 @RestController
 @RequestMapping("/api")
 public class AuthenticationController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtUtil jwtTokenUtil;
+    @Autowired
+    private CustomUserDetailsService customUserService;
+    @Autowired
+    private UserService userService;
 
-    private final UserService userService;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticationController(UserService userService, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.userService = userService;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        User user1 = userService.createUser(user);
-        return new ResponseEntity<>(user1, HttpStatus.CREATED);
+        User newUser = userService.createUser(user);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest req, @RequestBody UserLoginDTO uDTO) {
-        // Perform authentication logic
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getUserByUsername(auth.getName());
-        // Return appropriate response or token
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        final UserDetails userDetails = customUserService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails.getUsername());
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        // Perform logout logic
-        // Invalidate token or session
-        return ResponseEntity.ok("Logout successful");
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
     }
-
 }
+
