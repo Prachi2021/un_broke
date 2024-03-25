@@ -15,7 +15,7 @@ public class Mode {
 
 
     @ManyToOne
-    @JoinColumn(name = "mode_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "mode")

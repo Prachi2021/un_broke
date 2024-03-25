@@ -3,6 +3,7 @@ package com.prachi.un_broke.service;
 
 import com.prachi.un_broke.dto.Expense_DTO;
 import com.prachi.un_broke.model.Expense;
+import com.prachi.un_broke.model.Mode;
 import com.prachi.un_broke.model.SubCategory;
 import com.prachi.un_broke.model.User;
 import com.prachi.un_broke.repository.ExpenseRepo;
@@ -23,7 +24,8 @@ public class ExpenseService {
     SubCategoryService subCategoryService;
     @Autowired
     UserService userService;
-
+    @Autowired
+    ModeService modeService;
 
     public List<Expense> getExpenses(int user_id) {
         return expenseRepo.findByUserId(user_id);
@@ -33,13 +35,14 @@ public class ExpenseService {
         return expenseRepo.findExpenseByIdAndUserId(id, user_id);
     }
 
-    public Expense createExpense(Expense_DTO edto) {
-        SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), edto.getUser_id());
-        User user = userService.getUserById(edto.getUser_id());
-        if(subCat != null & user != null) {
+    public Expense createExpense(Expense_DTO edto, int user_id) {
+        SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), user_id);
+        User user = userService.getUserById(user_id);
+        Mode mode = modeService.getModeById(edto.getMode().getModeId(), user.getUser_id());
+        if(subCat != null) {
             edto.setSubcategory(subCat);
             edto.setUser(user);
-            Expense expense = new Expense(user, edto.getDescription(), edto.getAmount(), new java.sql.Date(new Date().getTime()), subCat);
+            Expense expense = new Expense(user, edto.getDescription(), edto.getAmount(), new java.sql.Date(new Date().getTime()), subCat, mode);
             return expenseRepo.save(expense);
         }
         else
@@ -55,6 +58,7 @@ public class ExpenseService {
                 expense.setDate(expense.getDate());
             expense.setAmount(edto.getAmount());
             expense.setDescription(edto.getDescription());
+            expense.setMode(edto.getMode());
             SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), edto.getUser_id());
             expense.setSubCategory(subCat);
 

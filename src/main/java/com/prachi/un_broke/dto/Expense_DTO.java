@@ -1,5 +1,6 @@
 package com.prachi.un_broke.dto;
 
+import com.prachi.un_broke.model.Mode;
 import com.prachi.un_broke.model.SubCategory;
 import com.prachi.un_broke.model.User;
 import com.prachi.un_broke.repository.SubCategoryRepo;
@@ -15,14 +16,16 @@ public class Expense_DTO {
     private SubCategory subcategory;
     private int user_id; // user id
     private User user;
+    private Mode mode;
 
 
-    public Expense_DTO(User user, String description, double amount, Date date, int cat_id){
+    public Expense_DTO(User user, String description, double amount, Date date, int cat_id, Mode mode){
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.cat_id = cat_id;
         this.user = user;
+        this.mode = mode;
     }
 
     // Getters
@@ -50,6 +53,9 @@ public class Expense_DTO {
     public User getUser() {
         return user;
     }
+    public Mode getMode() {
+        return mode;
+    }
 
     // Setters
     public void setId(int id) {
@@ -75,5 +81,8 @@ public class Expense_DTO {
     }
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 }
