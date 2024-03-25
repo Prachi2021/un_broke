@@ -18,12 +18,17 @@ public class SubCategory {
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
     Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user_id;
+
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "id")
     private Set<Expense> expense;
 
 
     public SubCategory(){}
-    public SubCategory(Category category, String subcategory){
+    public SubCategory(User user_id, Category category, String subcategory){
+        this.user_id = user_id;
         this.category = category;
         this.subcategory = subcategory;
     }
@@ -34,6 +39,10 @@ public class SubCategory {
     public String getSubCategory() {
         return subcategory;
     }
+    public User getUser_id() {
+        return user_id;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -41,6 +50,9 @@ public class SubCategory {
     // Setters
     public void setId(int id) {
         this.id = id;
+    }
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
     }
     public void setSubCategory(String sub_category) {
         this.subcategory = sub_category;

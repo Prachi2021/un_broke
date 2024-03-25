@@ -20,9 +20,13 @@ public class Expense {
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
     SubCategory subCategory;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user_id;
 
     public Expense(){}
-    public Expense(String desc, double amt, Date date, SubCategory subCategory){
+    public Expense(User user_id, String desc, double amt, Date date, SubCategory subCategory){
+        this.user_id = user_id;
         this.description= desc;
         this.amount = amt;
         this.date = date;
@@ -45,6 +49,9 @@ public class Expense {
     public Date getDate() {
         return date;
     }
+    public User getUser_id() {
+        return user_id;
+    }
 
     // Setters
     public void setId(int id) {
@@ -61,5 +68,8 @@ public class Expense {
     }
     public void setDate(Date date){
         this.date = date;
+    }
+    public void setUser_id(User user_id) {
+        this.user_id = user_id;
     }
 }
