@@ -11,15 +11,16 @@ import java.util.List;
 
 @Repository
 public interface ExpenseRepo extends JpaRepository<Expense, Integer> {
-    @Query("SELECT new com.prachi.un_broke.dto.Expense_DTO(e.id, e.description, e.amount, e.date, sc.id, sc.subcategory, c.category, u) " +
+    @Query("SELECT new com.prachi.un_broke.dto.Expense_DTO(e.id,  e.description, e.amount, e.date, sc.id, sc.subcategory, c.category) " +
             "FROM Expense e " +
             "JOIN e.subCategory sc " +
             "JOIN sc.category c " +
-            "JOIN e.user u " + // Assuming 'user' is the field name in the Expense entity for the User entity
-            "WHERE u.id = :userId") // Use :userId parameter to filter by userId
+            "JOIN e.user_id u " +
+            "WHERE e.user_id = :userId")
     List<Expense_DTO> getExpensesWithCategory(@Param("userId") int userId);
 
-    List<Expense> findByUserId(int userId);
+    @Query("SELECT e FROM Expense e WHERE e.user_id = :userId")
+    List<Expense> findByUserId(@Param("userId") int userId);
 
     @Query("SELECT e FROM Expense e WHERE e.id = :expenseId AND e.user_id = :userId")
     Expense findExpenseByIdAndUserId(@Param("expenseId") int expenseId, @Param("userId") int userId);

@@ -1,5 +1,6 @@
 package com.prachi.un_broke.service;
 
+import com.prachi.un_broke.dto.UserRegistrationDTO;
 import com.prachi.un_broke.model.User;
 import com.prachi.un_broke.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,13 @@ public class UserService {
         return userRepo.findByUsername(email).orElse(null);
     }
 
-    public User createUser(User user){
+    public User createUser(UserRegistrationDTO user){
         User user1 = getUserByEmail(user.getEmail());
         if(user1 == null) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
             String pass = encoder.encode(user.getPassword());
-            user.setPassword(pass);
-            return userRepo.save(user);
+            User user2 = new User(user.getUser_name(), user.getEmail(), pass);
+            return userRepo.save(user2);
         }
         else
             return null;

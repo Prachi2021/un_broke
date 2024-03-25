@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SubCategoryRepo extends JpaRepository<SubCategory, Integer> {
-    @Query("SELECT s FROM SubCategory s WHERE s.user_id.user_id = :userId")
+public interface ModeRepo extends JpaRepository<SubCategory, Integer> {
+    @Query("SELECT m FROM Mode m WHERE s.user_id.user_id = :userId")
     List<SubCategory> findByUserId(@Param("userId") int userId);
 }

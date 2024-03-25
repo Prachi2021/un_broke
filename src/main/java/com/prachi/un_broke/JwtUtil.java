@@ -1,22 +1,36 @@
 package com.prachi.un_broke;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
+
+import static io.jsonwebtoken.Jwts.builder;
+import static io.jsonwebtoken.Jwts.parser;
 
 @Component
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String secretKey = "yNaV+wRrsq7fRqyVBft8uuWu8UShdTuvFdd/PkA7LtI=";
 
     @Value("${jwt.expiration}")
-    private Long expiration;
+    private int expiration = 604800;
+
+
+    public String generateToken(String username) {
+        return builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * expiration)) // Example expiration
+                .signWith(SignatureAlgorithm.HS256, getSigningKey())
+                .compact();
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -31,22 +45,23 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
+    private Key getSigningKey() {
+        // Converts your secret key string to a Key object that JJwt can use
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
+
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return parser()  // Use parserBuilder() for newer versions
+                .setSigningKey(getSigningKey()) // Supply the key as a Key object
+                .build() // Build the parser
+                .parseClaimsJws(token) // Parse the token
+                .getBody(); // Extract the claims
     }
 
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-    }
 
     public Boolean validateToken(String token, String username) {
         final String usernameInToken = extractUsername(token);

@@ -2,7 +2,8 @@ package com.prachi.un_broke.controller;
 
 
 import com.prachi.un_broke.JwtUtil;
-import com.prachi.un_broke.model.JwtRequest;
+import com.prachi.un_broke.dto.UserLoginDTO;
+import com.prachi.un_broke.dto.UserRegistrationDTO;
 import com.prachi.un_broke.model.JwtResponse;
 import com.prachi.un_broke.model.User;
 import com.prachi.un_broke.service.CustomUserDetailsService;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,15 +36,18 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationDTO user) {
         User newUser = userService.createUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        if(newUser != null)
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        else
+            return new ResponseEntity<>("Bad Request", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        final UserDetails userDetails = customUserService.loadUserByUsername(authenticationRequest.getUsername());
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserLoginDTO ulDto) throws Exception {
+        authenticate(ulDto.getUser_name(), ulDto.getPassword());
+        final UserDetails userDetails = customUserService.loadUserByUsername(ulDto.getUser_name());
         final String token = jwtTokenUtil.generateToken(userDetails.getUsername());
         return ResponseEntity.ok(new JwtResponse(token));
     }
@@ -57,4 +62,5 @@ public class AuthenticationController {
         }
     }
 }
+
 

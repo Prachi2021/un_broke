@@ -2,6 +2,8 @@ package com.prachi.un_broke.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -12,11 +14,15 @@ public class User {
     private String email;
     private String password;
 
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user_id")
+    private Set<Expense> expense;
+
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "mode_id")
+    private Set<Mode> mode;
 
     public User(){}
 
     public User(String user_name, String email, String password){
-        this.email = email;
         this.user_name = user_name;
         this.email = email;
         this.password = password;

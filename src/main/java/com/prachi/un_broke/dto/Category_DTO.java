@@ -1,6 +1,7 @@
 package com.prachi.un_broke.dto;
 
 import com.prachi.un_broke.model.Category;
+import com.prachi.un_broke.model.User;
 
 
 public class Category_DTO {
@@ -8,6 +9,8 @@ public class Category_DTO {
     private String subcategory; // subcategory name
     private int cat_id;  // category id
     private Category category; // category object
+    private int user_id; // user id
+    private User user;
 
     // Constructors
     public Category_DTO(Category category, String subcategory){
@@ -28,6 +31,12 @@ public class Category_DTO {
     public int getCat_id() {
         return cat_id;
     }
+    public User getUser() {
+        return user;
+    }
+    public int getUser_id() {
+        return user_id;
+    }
 
     // Setters
     public void setId(int id) {
@@ -41,5 +50,11 @@ public class Category_DTO {
     }
     public void setCat_id(int cat_id) {
         this.cat_id = cat_id;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 }

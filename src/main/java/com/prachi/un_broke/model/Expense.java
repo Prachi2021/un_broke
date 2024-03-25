@@ -18,11 +18,11 @@ public class Expense {
 
     @ManyToOne
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
-    SubCategory subCategory;
+    private SubCategory subCategory;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user_id;
+    private User user_id;
 
     public Expense(){}
     public Expense(User user_id, String desc, double amt, Date date, SubCategory subCategory){

@@ -16,11 +16,11 @@ public class SubCategory {
 
     @ManyToOne
     @JoinColumn(name = "cat_id", referencedColumnName = "id")
-    Category category;
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user_id;
+    private User user_id;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "id")
     private Set<Expense> expense;

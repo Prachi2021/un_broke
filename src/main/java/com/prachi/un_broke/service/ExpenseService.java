@@ -34,7 +34,7 @@ public class ExpenseService {
     }
 
     public Expense createExpense(Expense_DTO edto) {
-        SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id());
+        SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), edto.getUser_id());
         User user = userService.getUserById(edto.getUser_id());
         if(subCat != null & user != null) {
             edto.setSubcategory(subCat);
@@ -55,7 +55,7 @@ public class ExpenseService {
                 expense.setDate(expense.getDate());
             expense.setAmount(edto.getAmount());
             expense.setDescription(edto.getDescription());
-            SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id());
+            SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), edto.getUser_id());
             expense.setSubCategory(subCat);
 
             return expenseRepo.save(expense);
