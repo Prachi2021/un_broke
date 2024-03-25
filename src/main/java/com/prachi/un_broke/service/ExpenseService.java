@@ -4,11 +4,13 @@ package com.prachi.un_broke.service;
 import com.prachi.un_broke.dto.Expense_DTO;
 import com.prachi.un_broke.model.Expense;
 import com.prachi.un_broke.model.SubCategory;
+import com.prachi.un_broke.model.User;
 import com.prachi.un_broke.repository.ExpenseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -19,28 +21,33 @@ public class ExpenseService {
     ExpenseRepo expenseRepo;
     @Autowired
     SubCategoryService subCategoryService;
+    @Autowired
+    UserService userService;
 
-    public List<Expense> getExpenses() {
-        return expenseRepo.findAll();
+
+    public List<Expense> getExpenses(int user_id) {
+        return expenseRepo.findByUserId(user_id);
     }
 
-    public Expense getExpenseById(int id) {
-        return expenseRepo.findById(id).orElse(null);
+    public Expense getExpenseById(int id, int user_id) {
+        return expenseRepo.findExpenseByIdAndUserId(id, user_id);
     }
 
     public Expense createExpense(Expense_DTO edto) {
         SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id());
-        if(subCat != null) {
+        User user = userService.getUserById(edto.getUser_id());
+        if(subCat != null & user != null) {
             edto.setSubcategory(subCat);
-            Expense expense = new Expense(edto.getDescription(), edto.getAmount(), new java.sql.Date(new Date().getTime()), subCat);
+            edto.setUser(user);
+            Expense expense = new Expense(user, edto.getDescription(), edto.getAmount(), new java.sql.Date(new Date().getTime()), subCat);
             return expenseRepo.save(expense);
         }
         else
             return null;
     }
 
-    public Expense updateExpense(Expense_DTO edto, int id){
-        Expense expense = getExpenseById(id);
+    public Expense updateExpense(Expense_DTO edto, int id, int user_id){
+        Expense expense = getExpenseById(id, user_id);
         if(expense != null) {
             if (edto.getDate() != null)
                 expense.setDate(edto.getDate());
@@ -60,10 +67,10 @@ public class ExpenseService {
     public void deleteExpense(int id){
         expenseRepo.deleteById(id);
     }
-    public List<Object> getExpensesWithCategory() {
-        List<Expense> expenseList = getExpenses();
+
+    public List<Object> getExpensesWithCategory(int user_id) {
         List<Object> expensesWithCategories = new ArrayList<>();
-        for(Expense expense: expenseList){
+        for(Expense expense: getExpenses(user_id)){
             List<Object> expenseWithCategory = new ArrayList<>();
             expenseWithCategory.add(expense.getDate());
             expenseWithCategory.add(expense.getDescription());

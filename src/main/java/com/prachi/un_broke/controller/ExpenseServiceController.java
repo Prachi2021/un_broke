@@ -22,14 +22,14 @@ public class ExpenseServiceController {
     ExpenseService expenseService;
 
     @GetMapping("")
-    public ResponseEntity<List<Expense>> getExpenses(){
-        List<Expense> expenseList = expenseService.getExpenses();
+    public ResponseEntity<List<Expense>> getExpenses(@RequestParam int userId){
+        List<Expense> expenseList = expenseService.getExpenses(userId);
         return ResponseEntity.ok(expenseList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> getExpenseById(@PathVariable("id") int id){
-        Expense expense = expenseService.getExpenseById(id);
+    public ResponseEntity<Expense> getExpenseById(@PathVariable("id") int id, @RequestParam int userId){
+        Expense expense = expenseService.getExpenseById(id, userId);
         return ResponseEntity.ok(expense);
     }
 
@@ -40,19 +40,19 @@ public class ExpenseServiceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Expense> updateExpense(@RequestBody Expense_DTO edto, @PathVariable("id") int id){
-        return ResponseEntity.ok(expenseService.updateExpense(edto, id));
+    public ResponseEntity<Expense> updateExpense(@RequestBody Expense_DTO edto, @PathVariable("id") int id, @RequestParam int userId){
+        return ResponseEntity.ok(expenseService.updateExpense(edto, id, userId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<List<Expense>> deleteExpense(@PathVariable("id") int id){
+    public ResponseEntity<List<Expense>> deleteExpense(@PathVariable("id") int id, @RequestParam int userId){
         expenseService.deleteExpense(id);
-        return getExpenses();
+        return getExpenses(userId);
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<Object>> getExpensesWithCategory(){
-        List<Object> expenses = expenseService.getExpensesWithCategory();
+    public ResponseEntity<List<Object>> getExpensesWithCategory(@RequestParam int userId){
+        List<Object> expenses = expenseService.getExpensesWithCategory(userId);
         return ResponseEntity.ok(expenses);
     }
 }
