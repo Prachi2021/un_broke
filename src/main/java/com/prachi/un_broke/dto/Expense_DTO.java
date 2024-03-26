@@ -16,16 +16,17 @@ public class Expense_DTO {
     private SubCategory subcategory;
     private int user_id; // user id
     private User user;
+    private int mode_id; // mode id
     private Mode mode;
 
 
-    public Expense_DTO(User user, String description, double amount, Date date, int cat_id, Mode mode){
+    public Expense_DTO(User user, String description, double amount, Date date, int cat_id, int mode_id){
         this.description = description;
         this.amount = amount;
         this.date = date;
         this.cat_id = cat_id;
         this.user = user;
-        this.mode = mode;
+        this.mode_id = mode_id;
     }
 
     // Getters
@@ -56,6 +57,9 @@ public class Expense_DTO {
     public Mode getMode() {
         return mode;
     }
+    public int getMode_id() {
+        return mode_id;
+    }
 
     // Setters
     public void setId(int id) {
@@ -84,5 +88,8 @@ public class Expense_DTO {
     }
     public void setMode(Mode mode) {
         this.mode = mode;
+    }
+    public void setMode_id(int mode_id) {
+        this.mode_id = mode_id;
     }
 }

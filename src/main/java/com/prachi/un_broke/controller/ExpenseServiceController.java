@@ -57,7 +57,7 @@ public class ExpenseServiceController {
         return getExpenses(userPrincipal);
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/details")
     public ResponseEntity<List<Object>> getExpensesWithCategory(@AuthenticationPrincipal CustomUserDetails userPrincipal){
         int userId = userPrincipal.getId();
         List<Object> expenses = expenseService.getExpensesWithCategory(userId);

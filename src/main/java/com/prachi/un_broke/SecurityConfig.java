@@ -46,6 +46,8 @@ public class SecurityConfig {
                 // Permit /api/login and /api/register without authentication
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/api/login", "/api/register").permitAll()
+                        .requestMatchers("/api/categories").permitAll()
+                        .requestMatchers("/api/categories/**").denyAll()
                         .anyRequest().authenticated())
                 // Disable CSRF as JWT is used
                 .csrf(AbstractHttpConfigurer::disable)

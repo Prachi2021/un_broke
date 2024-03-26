@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -38,11 +37,17 @@ public class ExpenseService {
     public Expense createExpense(Expense_DTO edto, int user_id) {
         SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), user_id);
         User user = userService.getUserById(user_id);
-        Mode mode = modeService.getModeById(edto.getMode().getModeId(), user.getUser_id());
+        Mode mode = modeService.getModeById(edto.getMode_id(), user.getUser_id());
+        java.sql.Date date = null;
+        if(edto.getDate() == null)
+            date = new java.sql.Date(new Date().getTime());
+        else
+            date = edto.getDate();
+
         if(subCat != null) {
             edto.setSubcategory(subCat);
             edto.setUser(user);
-            Expense expense = new Expense(user, edto.getDescription(), edto.getAmount(), new java.sql.Date(new Date().getTime()), subCat, mode);
+            Expense expense = new Expense(user, edto.getDescription(), edto.getAmount(), date, subCat, mode);
             return expenseRepo.save(expense);
         }
         else
@@ -58,7 +63,8 @@ public class ExpenseService {
                 expense.setDate(expense.getDate());
             expense.setAmount(edto.getAmount());
             expense.setDescription(edto.getDescription());
-            expense.setMode(edto.getMode());
+            Mode mode = modeService.getModeById(edto.getMode_id(), user_id);
+            expense.setMode(mode);
             SubCategory subCat = subCategoryService.getSubCategoryById(edto.getCat_id(), edto.getUser_id());
             expense.setSubCategory(subCat);
 
@@ -81,6 +87,7 @@ public class ExpenseService {
             expenseWithCategory.add(expense.getAmount());
             expenseWithCategory.add(expense.getSubCategory().getSubCategory());
             expenseWithCategory.add(expense.getSubCategory().getCategory().getCategory());
+            expenseWithCategory.add(expense.getMode().getMode());
             expensesWithCategories.add(expenseWithCategory);
         }
         return expensesWithCategories;
