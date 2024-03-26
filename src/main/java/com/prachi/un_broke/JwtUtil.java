@@ -16,8 +16,8 @@ import static io.jsonwebtoken.Jwts.parser;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secretKey = "yNaV+wRrsq7fRqyVBft8uuWu8UShdTuvFdd/PkA7LtI=";
+    @Value("")
+    private String secretKey = "";
 
     @Value("${jwt.expiration}")
     private int expiration = 604800;
